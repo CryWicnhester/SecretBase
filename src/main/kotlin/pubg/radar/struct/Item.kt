@@ -1,4 +1,3 @@
-@file:Suppress("NAME_SHADOWING")
 package pubg.radar.struct
 
 class Item {
@@ -8,7 +7,6 @@ class Item {
         private val category = mapOf(
                 "Attach" to mapOf(
                         "Weapon" to mapOf(
-
                                 "Lower" to mapOf(
                                         "AngledForeGrip" to "A.Grip",
                                         "Foregrip" to "V.Grip"
@@ -28,8 +26,8 @@ class Item {
                                 "Muzzle" to mapOf(
                                         "Choke" to "Choke",
                                         "Compensator" to mapOf(
-                                                "Large" to "AR.Comp",
-                                                "SniperRifle" to "S.Comp"
+                                                "Large" to "AR.Comp"
+                                                //"SniperRifle" to "S.Comp"
                                         ),
                                         "FlashHider" to mapOf(
                                                 "Large" to "FH",
@@ -37,8 +35,8 @@ class Item {
                                         ),
                                         "Suppressor" to mapOf(
                                                 "Medium" to "U.Supp",
-                                                "Large" to "AR Supp",
-                                                "SniperRifle" to "S Supp"
+                                                "Large" to "AR.Supp",
+                                                "SniperRifle" to "S.Supp"
                                         )
                                 ),
                                 "Stock" to mapOf(
@@ -50,23 +48,28 @@ class Item {
                                 ),
                                 "Upper" to mapOf(
                                         "DotSight" to "DotSight",
-                                        "Aimpoint" to "2x Scope",
+                                        "Aimpoint" to "Aimpoint",
                                         "Holosight" to "Holosight",
-                                        "ACOG" to "4x Scope",
-                                        "CQBSS" to "8x Scope"
+                                        "ACOG" to "ACOG",
+                                        "CQBSS" to "CQBSS"
                                 )
                         )
                 ),
-
-               "Ghillie" to "Ghillie"
-                ,
+                "Boost" to mapOf(
+                        "EnergyDrink" to "Drink",
+                        "PainKiller" to "Pain"
+                ),
+                "Heal" to mapOf(
+                        "FirstAid" to "FirstAid",
+                        "MedKit" to "MedKit"
+                ),
                 "Weapon" to mapOf(
                         "Grenade" to "Grenade",
                         "SmokeBomb" to "SmokeBomb",
                         "FlashBang" to "FlashBang",
                         "Molotov" to "Molotov",
                         "M16A4" to "M16A4",
-                        "HK416" to "M416",
+                        "HK416" to "HK416",
                         "Kar98k" to "Kar98k",
                         "SCAR-L" to "SCAR-L",
                         "AK47" to "AK47",
@@ -78,54 +81,37 @@ class Item {
                         "Pan" to "Pan",
                         "SawnOff" to "SawnOff",
                         "UZI" to "UZI",
-                        "G1B" to "AUG",
-                        "AUG" to "AUG",
-                        "Groza" to "Groza",
-                        "AWM" to "AWM",
-                        "M24" to "M24",
-                        "M249" to "M249",
-                        "Mk14" to "Mk14"),
-
-                "Boost" to mapOf(
-                        "EnergyDrink" to "Drink",
-                        "AdrenalineSyringe" to "Adrenaline Syringe",
-                        "PainKiller" to "Pain"
-                ),
-                "Heal" to mapOf(
-                        "FirstAid" to "FirstAid",
-                        "MedKit" to "MedKit"
+                        "G1B" to "G1B"
                 ),
                 "Ammo" to mapOf(
                         "9mm" to "9mm",
                         "45mm" to "45mm",
                         "556mm" to "556mm",
                         "762mm" to "762mm",
-                        "300" to "300Mag"
+                        "300mm" to "300mm"
                 ),
-
                 "Armor" to mapOf(
-                        "C" to "Armor3",
-                        "D" to "Armor2",
-                        "E" to "Armor1"),
+                        "C" to mapOf("01" to mapOf("Lv3" to "Arm3")),
+                        "D" to mapOf("01" to mapOf("Lv2" to "Arm2"))
+                ),
                 "Back" to mapOf(
-                        "B" to "ParachutePack",
                         "C" to mapOf(
-                                "01" to "Bag3",
-                                "02" to "Bag3"),
+                                "01" to mapOf("Lv3" to "Bag3"),
+                                "02" to mapOf("Lv3" to "Bag3")
+                        ),
                         "F" to mapOf(
-                                "01" to "Bag2",
-                                "02" to "Bag2"),
-                        "E" to mapOf(
-                                "01" to "Bag1",
-                                "02" to "Bag1")),
+                                "01" to mapOf("Lv2" to "Bag2"),
+                                "02" to mapOf("Lv2" to "Bag2")
+                        )
+                ),
                 "Head" to mapOf(
-                        "G" to "Helmet3",
                         "F" to mapOf(
-                                "01" to "Helmet2",
-                                "02" to "Helmet2"),
-                        "E" to mapOf(
-                                "01" to "Helmet1",
-                                "02" to "Helmet1"))
+                                "01" to mapOf("Lv2" to "Helm2"),
+                                "02" to mapOf("Lv2" to "Helm2")
+                        ),
+                        "G" to mapOf("01" to mapOf("Lv3" to "Helm3"))
+                )
+
         ) as Map<String, Any>
 
         /**
@@ -147,5 +133,6 @@ class Item {
             }
             return null
         }
+
     }
 }

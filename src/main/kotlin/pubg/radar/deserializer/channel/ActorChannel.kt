@@ -9,9 +9,7 @@ import pubg.radar.struct.*
 import pubg.radar.struct.Archetype.*
 import pubg.radar.struct.NetGUIDCache.Companion.guidCache
 import pubg.radar.struct.cmd.PlayerStateCMD.selfID
-import pubg.radar.struct.cmd.PlayerStateCMD.playerNames
 import pubg.radar.util.tuple2
-import pubg.radar.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class ActorChannel(ChIndex: Int, client: Boolean = true) : Channel(ChIndex, CHTYPE_ACTOR, client) {
@@ -23,25 +21,20 @@ class ActorChannel(ChIndex: Int, client: Boolean = true) : Channel(ChIndex, CHTY
         val actors = ConcurrentHashMap<NetworkGUID, Actor>()
         val visualActors = ConcurrentHashMap<NetworkGUID, Actor>()
         val airDropLocation = ConcurrentHashMap<NetworkGUID, Vector3>()
-        val airDropItems = ConcurrentHashMap<NetworkGUID, MutableList<tuple2<NetworkGUID, String?>>>()
-        val droppedItemLocation = ConcurrentHashMap<NetworkGUID, tuple2<Vector3, String>>()
-        val itemGuidToStringName = ConcurrentHashMap<NetworkGUID, String?>()
+        val droppedItemLocation = ConcurrentHashMap<NetworkGUID, tuple2<Vector2, String>>()
         val corpseLocation = ConcurrentHashMap<NetworkGUID, Vector3>()
         val actorHasWeapons = ConcurrentHashMap<NetworkGUID, IntArray>()
         val weapons = ConcurrentHashMap<Int, Actor>()
         val droppedItemGroup = ConcurrentHashMap<NetworkGUID, ArrayList<NetworkGUID>>()
         val droppedItemCompToItem = ConcurrentHashMap<NetworkGUID, NetworkGUID>()
         val droppedItemToItem = ConcurrentHashMap<NetworkGUID, NetworkGUID>()
-        val itemBag=ConcurrentHashMap<NetworkGUID,DynamicArray<NetworkGUID?>>()
 
 
         override fun onGameOver() {
             actors.clear()
             visualActors.clear()
             airDropLocation.clear()
-            airDropItems.clear()
             droppedItemLocation.clear()
-            itemGuidToStringName.clear()
             droppedItemToItem.clear()
             corpseLocation.clear()
             weapons.clear()
@@ -51,7 +44,6 @@ class ActorChannel(ChIndex: Int, client: Boolean = true) : Channel(ChIndex, CHTY
     }
 
     var actor: Actor? = null
-    var first = false
 
     override fun ReceivedBunch(bunch: Bunch) {
         if (client && bunch.bHasMustBeMappedGUIDs) {
@@ -103,25 +95,10 @@ class ActorChannel(ChIndex: Int, client: Boolean = true) : Channel(ChIndex, CHTY
                         repObj = _subobj
                     } else {
                         val (classGUID, classObj) = bunch.readObject()//SubOjbectClass,SubObjectClassNetGUID
-                        if (classObj != null) {
+                        if (classObj != null && (actor.Type == DroopedItemGroup || actor.Type == DroppedItem)) {
                             val sn = Item.isGood(classObj.pathName)
-                            when {
-                                (actor.Type == DroopedItemGroup || actor.Type == DroppedItem) -> {
-                                    if (sn != null)
-                                        droppedItemLocation[netguid] = tuple2(Vector3(actor.location.x, actor.location.y, actor.location.z), sn)
-
-                                }
-                                actor.Type == AirDrop -> {
-                                    if(airDropItems[actor.netGUID] == null) airDropItems[actor.netGUID] = mutableListOf()
-                                    if(airDropItems[actor.netGUID]?.contains(tuple2(netguid,sn)) == false) {
-                                        if(sn != "null") {
-                                            airDropItems[actor.netGUID]?.add(tuple2(netguid, sn))
-                                        } else {
-                                            airDropItems[actor.netGUID]?.add(tuple2(netguid, classObj.pathName))
-                                        }
-                                    }
-                                }
-                            }
+                            if (sn != null)
+                                droppedItemLocation[netguid] = tuple2(Vector2(actor.location.x, actor.location.y), sn)
                         }
                         bugln { "subObjClass:${actor.netGUID} ${actor.archetype.pathName} classObj:$classObj" }
                         if (!classGUID.isValid() || classObj == null)
@@ -130,6 +107,7 @@ class ActorChannel(ChIndex: Int, client: Boolean = true) : Channel(ChIndex, CHTY
                         guidCache.registerNetGUID_Client(netguid, subobj)
                         repObj = guidCache.getObjectFromNetGUID(netguid)
                     }
+
                 }
             }
             val NumPayloadBits = bunch.readIntPacked()
@@ -143,27 +121,17 @@ class ActorChannel(ChIndex: Int, client: Boolean = true) : Channel(ChIndex, CHTY
                 val outPayload = bunch.deepCopy(NumPayloadBits)
 
                 info { ",${if (bHasRepLayout) "hasRepLayout" else "noRepLayout"},actor[${actor.netGUID.value}]archetype=${actor.archetype}" }
-                if (bHasRepLayout) { //object has rep layout
+                if (bHasRepLayout) {
                     if (!client)// Server shouldn't receive properties.
                         return
                     if (actor.Type == DroopedItemGroup && repObj?.pathName == "RootComponent")
                         repObj = NetGuidCacheObject("DroppedItemGroupRootComponent", repObj.outerGUID)
                     repl_layout_bunch(outPayload, repObj, actor)
                 }
-                if(!client) { // if client -> server
-                    when {
-                        actor.isVehicle -> {
-                            while (outPayload.notEnd()) {
-                                sendClientMoveToServerReliably(outPayload, actor)
-                            }
-                        }
-                        actor.isACharacter && repObj?.pathName == "Player" -> {
-                            selfID = actor.netGUID
-                            while(outPayload.notEnd()) {
-                                charmovecomp(outPayload)
-                            }
-                        }
-                    }
+                if (!client && repObj?.pathName == "CharMoveComp") {
+                    selfID = actor.netGUID
+                    while (outPayload.notEnd())
+                        charmovecomp(outPayload)
                 }
             } catch (e: Exception) {
             }
@@ -210,9 +178,7 @@ class ActorChannel(ChIndex: Int, client: Boolean = true) : Channel(ChIndex, CHTY
                         actors[netGUID] = this
                         when (Type) {
                             Weapon -> weapons[netGUID.value] = this
-                            AirDrop -> {
-                                airDropLocation[netGUID] = location
-                            }
+                            AirDrop -> airDropLocation[netGUID] = location
                             DeathDropItemPackage -> corpseLocation[netGUID] = location
                             else -> {
                             }

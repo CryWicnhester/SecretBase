@@ -59,7 +59,7 @@ enum class Archetype { //order matters, it affects the order of drawing
     }
 }
 
-open class Actor(val netGUID: NetworkGUID, private val archetypeGUID: NetworkGUID, val archetype: NetGuidCacheObject, private val ChIndex: Int) {
+class Actor(val netGUID: NetworkGUID, private val archetypeGUID: NetworkGUID, val archetype: NetGuidCacheObject, private val ChIndex: Int) {
     private val archetype1: Archetype = fromArchetype(archetype.pathName)
     val Type: Archetype
         get() = archetype1

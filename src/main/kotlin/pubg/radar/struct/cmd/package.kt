@@ -15,6 +15,7 @@ enum class REPCMD {
     DynamicArray,  //0 Dynamic array
     Return,  //1 Return from array, or end of stream
     Property,  //2 Generic property
+
     PropertyBool,//3
     PropertyFloat,//4
     PropertyInt,//5
@@ -87,7 +88,7 @@ object CMD {
             Plane.name to APawnCMD::process,
             Player.name to ActorCMD::process,
             Parachute.name to APawnCMD::process,
-            AirDrop.name to AirDropComponentCMD::process,
+            AirDrop.name to APawnCMD::process,
             PlayerState.name to PlayerStateCMD::process,
             DroppedItem.name to DroppedItemCMD::process,
             Team.name to TeamCMD::process,

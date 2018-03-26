@@ -25,6 +25,7 @@ fun deregister(gameListener: GameListener) {
 
 fun gameStart() {
     println("New Game is Starting")
+
     gameStarted = true
     gameListeners.forEach { it.onGameStart() }
 }

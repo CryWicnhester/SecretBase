@@ -1,7 +1,6 @@
 package pubg.radar.struct.cmd
 
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import pubg.radar.GameListener
 import pubg.radar.bugln
 import pubg.radar.deserializer.ROLE_MAX
@@ -32,7 +31,7 @@ import pubg.radar.struct.cmd.PlayerStateCMD.selfID
 import java.util.concurrent.ConcurrentHashMap
 
 var selfDirection = 0f
-val selfCoords = Vector3()
+val selfCoords = Vector2()
 var selfAttachTo: Actor? = null
 
 
@@ -45,20 +44,14 @@ object ActorCMD : GameListener {
         actorWithPlayerState.clear()
         playerStateToActor.clear()
         actorHealth.clear()
-        actorDowned.clear()
-        actorBeingRevived.clear()
     }
 
     val actorWithPlayerState = ConcurrentHashMap<NetworkGUID, NetworkGUID>()
     val playerStateToActor = ConcurrentHashMap<NetworkGUID, NetworkGUID>()
     val actorHealth = ConcurrentHashMap<NetworkGUID, Float>()
-    val actorDowned = ConcurrentHashMap<NetworkGUID, Boolean>()
-    val actorBeingRevived = ConcurrentHashMap<NetworkGUID, Boolean>()
 
     fun process(actor: Actor, bunch: Bunch, repObj: NetGuidCacheObject?, waitingHandle: Int, data: HashMap<String, Any?>): Boolean {
         with(bunch) {
-            actorDowned[actor.netGUID] = false
-            actorBeingRevived[actor.netGUID] = false
             when (waitingHandle) {
                 1 -> if (readBit()) {//bHidden
                     visualActors.remove(actor.netGUID)
@@ -136,7 +129,6 @@ object ActorCMD : GameListener {
                     if (playerStateGUID.isValid()) {
                         actorWithPlayerState[actor.netGUID] = playerStateGUID
                         playerStateToActor[playerStateGUID] = actor.netGUID
-
                     }
                 }
                 17 -> {//RemoteViewPitch 2
@@ -185,7 +177,7 @@ object ActorCMD : GameListener {
                 31 -> {
                     val result = propertyInt()
                 }
-                    //struct FRepRootMotionMontage RepRootMotion;
+            //struct FRepRootMotionMontage RepRootMotion;
                 32 -> {
                     val result = propertyBool()
                 }
@@ -360,12 +352,12 @@ object ActorCMD : GameListener {
                     val b = result
                 }
                 82 -> {
-                    val bIsDowned=propertyBool()
-                    actorDowned[actor.netGUID] = bIsDowned
+                    val result = propertyBool()
+                    val b = result
                 }
                 83 -> {
-                    val bIsReviving = propertyBool()
-                    actorBeingRevived[actor.netGUID] = bIsReviving
+                    val result = propertyBool()
+                    val b = result
                 }
                 84 -> {
                     val result = propertyBool()

@@ -135,11 +135,10 @@ class Sniffer {
                         val ip = packet[IpPacket::class.java]
                         val udp = udp_payload(packet) ?: return@loop
                         val raw = udp.payload.rawData
-                        when {
-                            //raw.size == 44 -> parseSelfLocation(raw)
-                            udp.header.srcPort.valueAsInt() in 7000..7999 -> proc_raw_packet(raw)
-                            udp.header.dstPort.valueAsInt() in 7000..7999 -> proc_raw_packet(raw,false)
-                        }
+                        if (udp.header.dstPort.valueAsInt() in 7000..7999)
+                            proc_raw_packet(raw, false)
+                        else if (udp.header.srcPort.valueAsInt() in 7000..7999)
+                            proc_raw_packet(raw)
                     } catch (e: Exception) {
                     }
                 }
@@ -157,11 +156,10 @@ class Sniffer {
                             val packet = handle.nextPacket ?: break
                             val udp = udp_payload(packet) ?: continue
                             val raw = udp.payload.rawData
-                            when {
-                                //raw.size == 44 -> parseSelfLocation(raw)
-                                udp.header.srcPort.valueAsInt() in 7000..7999 -> proc_raw_packet(raw)
-                                udp.header.dstPort.valueAsInt() in 7000..7999 -> proc_raw_packet(raw, false)
-                            }
+                            if (udp.header.dstPort.valueAsInt() in 7000..7999)
+                                proc_raw_packet(raw, false)
+                            else if (udp.header.srcPort.valueAsInt() in 7000..7999)
+                                proc_raw_packet(raw)
                         } catch (e: IndexOutOfBoundsException) {
                         } catch (e: Exception) {
                         } catch (e: NotOpenException) {
@@ -172,7 +170,7 @@ class Sniffer {
                 }
             }
         }
-    /*
+
         private fun parseSelfLocation(raw: ByteArray): Boolean {
             val len = raw.size
             val flag1 = raw[len - check1]
@@ -189,6 +187,5 @@ class Sniffer {
             }
             return false
         }
-        */
     }
 }

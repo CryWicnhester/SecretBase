@@ -1,22 +1,17 @@
 package wumo.pubg.struct.cmd
 
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import pubg.radar.GameListener
 import pubg.radar.bugln
 import pubg.radar.register
 import pubg.radar.struct.Actor
 import pubg.radar.struct.Bunch
 import pubg.radar.struct.NetGuidCacheObject
-import pubg.radar.struct.NetworkGUID
 import pubg.radar.struct.cmd.CMD.propertyString
 import pubg.radar.struct.cmd.CMD.propertyVector100
 import java.util.concurrent.ConcurrentHashMap
 
 object TeamCMD : GameListener {
     val team = ConcurrentHashMap<String, String>()
-    val mapMakersByName = ConcurrentHashMap<NetworkGUID, Vector3>()
-
 
     init {
         register(this)
@@ -44,10 +39,6 @@ object TeamCMD : GameListener {
                 18 -> {
                     val playerName = propertyString()
                     team[playerName] = playerName
-                }
-                23 -> {
-                    val markerLocation = propertyVector100()
-                    mapMakersByName[actor.netGUID] = markerLocation
                 }
                 else -> return false
             }

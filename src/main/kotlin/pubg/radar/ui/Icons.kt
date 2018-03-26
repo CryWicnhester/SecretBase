@@ -16,14 +16,14 @@ class Icons(sheet: Texture, size: Int) {
             "MedKit" to arrayOf(4, 0),
             "Drink" to arrayOf(5, 0),
             "Pain" to arrayOf(6, 0),
-            "Adrenaline Syringe" to arrayOf(7, 0),
+            "Syringe" to arrayOf(7, 0),
             // 1 Gear
             "Bag2" to arrayOf(0, 1),
             "Bag3" to arrayOf(1, 1),
-            "Armor2" to arrayOf(2, 1),
-            "Armor3" to arrayOf(3, 1),
-            "Helmet2" to arrayOf(4, 1),
-            "Helmet3" to arrayOf(5, 1),
+            "Arm2" to arrayOf(2, 1),
+            "Arm3" to arrayOf(3, 1),
+            "Helm2" to arrayOf(4, 1),
+            "Helm3" to arrayOf(5, 1),
             // 2 Melee
             "Crowbar" to arrayOf(0, 2),
             "Sickle" to arrayOf(1, 2),
@@ -40,7 +40,7 @@ class Icons(sheet: Texture, size: Int) {
             "45mm" to arrayOf(2, 4),
             "556mm" to arrayOf(3, 4),
             "762mm" to arrayOf(4, 4),
-            "300Mag" to arrayOf(5, 4),
+            "300mm" to arrayOf(5, 4),
             // 5 Shotguns
             "S686" to arrayOf(0, 5),
             "SK12" to arrayOf(1, 5),
@@ -63,9 +63,9 @@ class Icons(sheet: Texture, size: Int) {
             "M16A4" to arrayOf(0, 8),
             "AK47" to arrayOf(1, 8),
             "SCAR-L" to arrayOf(2, 8),
-            "M416" to arrayOf(3, 8),
+            "HK416" to arrayOf(3, 8),
             "Groza" to arrayOf(4, 8),
-            "AUG" to arrayOf(5, 8),
+            "G1B" to arrayOf(5, 8),
             // 9 Rifles
             "Win94" to arrayOf(0, 9),
             "VSS" to arrayOf(1, 9),
@@ -86,7 +86,6 @@ class Icons(sheet: Texture, size: Int) {
             "S.Comp" to arrayOf(6, 10),
             "AR.Stock" to arrayOf(7, 10),
             "CheekPad" to arrayOf(8, 10),
-            "S.Loops" to arrayOf(7, 10),
             // Extended Mags
             "A.Grip" to arrayOf(0, 11),
             "U.ExtQ" to arrayOf(1, 11),
@@ -94,16 +93,16 @@ class Icons(sheet: Texture, size: Int) {
             "S.ExtQ" to arrayOf(3, 11),
             // Suppressors
             "U.Supp" to arrayOf(4, 11),
-            "AR Supp" to arrayOf(5, 11),
-            "S Supp" to arrayOf(6, 11),
+            "AR.Supp" to arrayOf(5, 11),
+            "S.Supp" to arrayOf(6, 11),
             "H.Supp" to arrayOf(7, 11),
             // Scopes
             "DotSight" to arrayOf(0, 12),
             "Holosight" to arrayOf(1, 12),
-            "2x Scope" to arrayOf(2, 12),
-            "4x Scope" to arrayOf(3, 12),
-            "8x Scope" to arrayOf(4, 12),
-            "15x" to arrayOf(5, 12)
+            "Aimpoint" to arrayOf(2, 12),
+            "ACOG" to arrayOf(3, 12),
+            "CQBSS" to arrayOf(4, 12)
+            // "15x" to arrayOf(5, 12)
     )
 
     fun setIcon(key: String) {

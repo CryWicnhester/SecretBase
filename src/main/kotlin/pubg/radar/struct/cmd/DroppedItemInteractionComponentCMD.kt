@@ -1,6 +1,6 @@
 package pubg.radar.struct.cmd
 
-import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.math.Vector2
 import pubg.radar.deserializer.channel.ActorChannel.Companion.droppedItemLocation
 import pubg.radar.struct.Actor
 import pubg.radar.struct.Bunch
@@ -58,7 +58,7 @@ object DroppedItemInteractionComponentCMD {
                 }
                 12 -> {
                     val relativeLocation = propertyVector()
-                    data["relativeLocation"] = Vector3(relativeLocation.x, relativeLocation.y, relativeLocation.z)
+                    data["relativeLocation"] = Vector2(relativeLocation.x, relativeLocation.y)
 //          println("relativeLocation:$relativeLocation")
                 }
                 13 -> {
@@ -75,7 +75,7 @@ object DroppedItemInteractionComponentCMD {
                     val (loc, _) = droppedItemLocation[itemGUID] ?: return true
                     droppedItemCompToItem[repObj!!.outerGUID] = itemGUID
 //          print("item loc:$loc ->")
-                    loc.add(data["relativeLocation"] as Vector3)
+                    loc.add(data["relativeLocation"] as Vector2)
 //          println("item loc:$loc")
                 }
                 else -> return false
